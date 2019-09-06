@@ -1,0 +1,17 @@
+<?php if ($block->isWechatPaymentMethod()): ?>
+<?php $orderTotal=$this->helper('Magento\Framework\Pricing\Helper\Data')->currency($block->getGrandTotal(), true, false); ?>
+<div class="wechat-success">
+  <h2 class="sub-title"> <?= /* @escapeNotVerified */ __('Your order is pending!') ?> </h2>
+  <?php $qrCodeUrl = $this->helper('Magento\Checkout\Helper\Data')->getCheckout()->getStripePaymentsRedirectUrl(); ?>
+
+  <p><?= /* @escapeNotVerified */ __('To complete the order, please pay <b>%1</b> by scanning the QR code below with your mobile device', $block->escapeHtml($orderTotal)) ?></p>
+  <div class="actions-toolbar">
+    <div class="img-qr">
+      <p><a href="<?php echo $qrCodeUrl; ?>" target="_blank"><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=<?php echo $qrCodeUrl; ?>&choe=UTF-8"/></a></p>
+    </div>
+    <br>
+  </div>
+
+  <div style="clear: both;">&nbsp;</div>
+</div>
+<?php endif; ?>

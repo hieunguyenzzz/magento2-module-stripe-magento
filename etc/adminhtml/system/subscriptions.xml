@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+  <group id="subscriptions" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Subscriptions</label>
+    <field id="shipping" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Shipping Cost</label>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\SubscriptionsShipping</source_model>
+      <config_path>payment/stripe_payments_subscriptions/shipping</config_path>
+    </field>
+  </group>
+</include>

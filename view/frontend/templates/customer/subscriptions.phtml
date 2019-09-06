@@ -1,0 +1,98 @@
+<?php
+
+$subscriptions = $this->getSubscriptions();
+
+if (empty($subscriptions)): ?>
+<div class="message info empty">
+  <span>You do not have any subscriptions yet.</span>
+</div>
+<?php else: ?>
+  <div class="table-wrapper stripe-subscriptions">
+    <table class="data table table-order-items history" id="my-orders-table">
+      <caption class="table-caption">Subscriptions</caption>
+      <thead>
+        <tr>
+          <th scope="col" class="col order">Order #</th>
+          <th scope="col" class="col id">Subscription</th>
+          <th scope="col" class="col delivery">Delivery Every</th>
+          <th scope="col" class="col billed">Last Billed</th>
+          <th scope="col" class="col total">Status</th>
+          <th scope="col" class="col status">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+  <?php foreach ($subscriptions as $subscription): ?>
+        <tr>
+          <td data-th="Order #" class="col order">
+            <a href="viewOrder/<?php echo $subscription->metadata["Order #"]; ?>">
+              <?php echo $subscription->metadata["Order #"]; ?>
+            </a>
+          </td>
+          <td data-th="Subscription" class="col id">
+            <a href="javascript:void(0)" onclick="stripe.toggleSubscription('<?php echo $subscription->id; ?>', false);">
+              <?php echo $this->formatSubscriptionName($subscription); ?>
+            </a>
+            <div id="<?php echo $subscription->id; ?>" class="stripe-subscription-edit">
+              <?php if ($this->hasEditableContent($subscription)): ?>
+                <div class="static section">
+                  <div class="details">
+                    <b>Shipping Address</b><br>
+                    <?php echo implode("<br>", $this->getFormatedShippingLines($subscription)); ?>
+                  </div>
+                  <div class="actions">
+                    <button onclick="stripe.editSubscription('<?php echo $subscription->id; ?>')" class="action edit">Edit</button> or
+                    <a href="javascript:void(0)" onclick="stripe.toggleSubscription('<?php echo $subscription->id; ?>')" class="action close">Close</a>
+                  </div>
+                </div>
+                <div class="mutable section">
+                  <form action="edit/<?php echo $subscription->id; ?>" method="POST">
+                    <div class="details">
+                      <b>Shipping Address</b><br>
+                      <?php foreach ($this->editableContent() as $key): ?>
+                        <input type="text"
+                          value="<?php echo $subscription->metadata[$key]; ?>"
+                          name="data[<?php echo $key; ?>]"
+                          placeholder="<?php echo $key; ?>"
+                          class="input-text"><br>
+                      <?php endforeach; ?>
+                    </div>
+                    <div class="actions">
+                      <button type="submit">Save</button> or
+                      <a href="javascript:void(0)" onclick="stripe.cancelEditSubscription('<?php echo $subscription->id; ?>')">Cancel</a>
+                    </div>
+                  </form>
+                </div>
+              <?php else: ?>
+                <div class="immutable section">
+                  This subscription has no shipping address to edit.
+                </div>
+                <div class="actions">
+                  <a href="javascript:void(0)" onclick="stripe.toggleSubscription('<?php echo $subscription->id; ?>')">Close</a>
+                </div>
+              <?php endif; ?>
+            </div>
+          </td>
+          <td data-th="Delivery Every" class="col delivery">
+            <?php echo $this->formatDelivery($subscription); ?>
+          </td>
+          <td data-th="Last Billed" class="col billed">
+            <?php echo $this->formatLastBilled($subscription); ?>
+          </td>
+          <td data-th="Status" class="col status">
+          <?php echo $this->getStatus($subscription); ?>
+          </td>
+          <td data-th="Actions" class="col actions">
+            <a href="cancel/<?php echo $subscription->id; ?>" class="action cancel"
+              onclick="return confirm('Are you sure you want to cancel this subscription?');">
+              <span>Cancel</span>
+            </a>
+            <a href="javascript:void(0)" onclick="stripe.toggleSubscription('<?php echo $subscription->id; ?>', true);" class="action edit">
+              <span>Edit</span>
+            </a>
+          </td>
+        </tr>
+  <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+<?php endif;

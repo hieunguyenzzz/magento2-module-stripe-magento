@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+  <group id="cards" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+    <label>Card Payments</label>
+    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Enabled</label>
+      <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+      <config_path>payment/stripe_payments/active</config_path>
+    </field>
+    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Title</label>
+      <comment><![CDATA[This is the payment method title used at the checkout page]]></comment>
+      <config_path>payment/stripe_payments/title</config_path>
+    </field>
+    <field id="apple_pay_checkout" translate="label" type="select" sortOrder="86" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Apple Pay</label>
+      <comment>
+        <![CDATA[Enable Apple Pay, Google Pay and Microsoft Pay on the checkout page.]]>
+      </comment>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\Enabled</source_model>
+      <config_path>payment/stripe_payments/apple_pay_checkout</config_path>
+    </field>
+    <field id="apple_pay_location" translate="label" type="select" sortOrder="88" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Apple Pay Button Location</label>
+      <comment>
+        <![CDATA[Where should we display the Apple Pay button?]]>
+      </comment>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\ApplePayLocation</source_model>
+      <depends>
+        <field id="apple_pay_checkout">1</field>
+      </depends>
+      <config_path>payment/stripe_payments/apple_pay_location</config_path>
+    </field>
+    <field id="payment_action" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Payment Action</label>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\PaymentAction</source_model>
+      <config_path>payment/stripe_payments/payment_action</config_path>
+    </field>
+    <field id="expired_authorizations" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Expired Authorizations</label>
+      <comment>
+        <![CDATA[Authorizations will typically expire after 7 days. What should we do if an admin tries to capture an expired authorization?]]>
+      </comment>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\ExpiredAuthorizations</source_model>
+      <depends>
+        <field id="payment_action">authorize</field>
+      </depends>
+      <config_path>payment/stripe_payments/expired_authorizations</config_path>
+    </field>
+
+    <field id="automatic_invoicing" translate="label" type="select" sortOrder="105" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Automatic Invoicing</label>
+      <comment>
+        <![CDATA[For Authorize Only orders, should we automatically create an invoice in Pending status right after the order?]]>
+      </comment>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\Enabled</source_model>
+      <depends>
+        <field id="payment_action">authorize</field>
+      </depends>
+      <config_path>payment/stripe_payments/automatic_invoicing</config_path>
+    </field>
+    <field id="radar_risk_level" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Hold Elevated Risk Orders</label>
+      <comment>
+        <![CDATA[If Stripe Radar marks a payment with Elevated Risk status, the order will be placed On Hold until it is reviewed.]]>
+      </comment>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\StripeRadar</source_model>
+      <config_path>payment/stripe_payments/radar_risk_level</config_path>
+    </field>
+    <field id="ccsave" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Save Customer Cards</label>
+      <comment>
+        <![CDATA[Enable this if you want to save customer cards on Stripe's servers so that they don't have to enter the details of the same card twice]]>
+      </comment>
+      <source_model>StripeIntegration\Payments\Model\Adminhtml\Source\CcSave</source_model>
+      <config_path>payment/stripe_payments/ccsave</config_path>
+    </field>
+    <field id="statement_descriptor" translate="label" type="text" sortOrder="125" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Optional Statement Descriptor</label>
+      <config_path>payment/stripe_payments/statement_descriptor</config_path>
+    </field>
+    <field id="use_store_currency" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Pay in store currency</label>
+      <comment>Choose "Yes" to use store view currency instead of base currency.</comment>
+      <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+      <config_path>payment/stripe_payments/use_store_currency</config_path>
+    </field>
+    <field id="receipt_email" translate="label" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+      <label>Enable Stripe email receipts</label>
+      <comment>Let Stripe send customized email receipts for successful payments and refunds.</comment>
+      <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+      <config_path>payment/stripe_payments/receipt_email</config_path>
+    </field>
+    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+     <label>Payment From Applicable Countries</label>
+     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+      <config_path>payment/stripe_payments/allowspecific</config_path>
+   </field>
+   <field id="specificcountry" translate="label" type="multiselect" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="1">
+     <label>Payment From Specific Countries</label>
+     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+      <config_path>payment/stripe_payments/specificcountry</config_path>
+   </field>
+   <field id="sort_order" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+     <label>Sort Order</label>
+     <comment>Adjust this to move the payment method above or below other payment methods</comment>
+     <frontend_class>validate-number</frontend_class>
+      <config_path>payment/stripe_payments/sort_order</config_path>
+   </field>
+ </group>
+</include>
